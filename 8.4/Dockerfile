@@ -1,4 +1,4 @@
-FROM php:8.2-apache
+FROM php:8.4
 
 RUN apt-get update 
 RUN apt-get install -y mariadb-client
@@ -29,10 +29,9 @@ RUN apt-get install -y --no-install-recommends unixodbc
 
 
 
-RUN pecl install mcrypt
 
 
-RUN docker-php-ext-configure imap --with-kerberos --with-imap-ssl 
+#RUN docker-php-ext-configure imap --with-kerberos --with-imap-ssl 
 RUN docker-php-ext-configure ldap --with-libdir=lib/x86_64-linux-gnu/ 
 RUN  CFLAGS="-I/usr/src/php" docker-php-ext-install bcmath 
 RUN  CFLAGS="-I/usr/src/php" docker-php-ext-install bz2 
@@ -53,7 +52,7 @@ RUN  CFLAGS="-I/usr/src/php" docker-php-ext-install gmp
 #RUN  CFLAGS="-I/usr/src/php" docker-php-ext-install http 
 RUN  CFLAGS="-I/usr/src/php" docker-php-ext-install iconv 
 #RUN  CFLAGS="-I/usr/src/php" docker-php-ext-install imagick 
-RUN  docker-php-ext-configure imap --with-kerberos --with-imap-ssl && CFLAGS="-I/usr/src/php" docker-php-ext-install imap 
+# RUN  docker-php-ext-configure imap --with-kerberos --with-imap-ssl && CFLAGS="-I/usr/src/php" docker-php-ext-install imap 
 RUN  CFLAGS="-I/usr/src/php" docker-php-ext-install intl
 #RUN  CFLAGS="-I/usr/src/php" docker-php-ext-install json
 RUN  CFLAGS="-I/usr/src/php" docker-php-ext-install ldap 
@@ -78,6 +77,10 @@ RUN  CFLAGS="-I/usr/src/php" docker-php-ext-install xmlwriter
 RUN  CFLAGS="-I/usr/src/php" docker-php-ext-install xsl 
 RUN  CFLAGS="-I/usr/src/php" docker-php-ext-install zip
 
+RUN pecl install imap
+RUN pecl install mailparse
+
+
 RUN apt-get install -y --no-install-recommends  libsodium-dev
 RUN  CFLAGS="-I/usr/src/php" docker-php-ext-install sodium 
 
@@ -88,6 +91,12 @@ RUN echo 'memory_limit = 640M' >> /usr/local/etc/php/php.ini && \
 RUN curl -sS https://getcomposer.org/installer -o composer-setup.php
 RUN php composer-setup.php --install-dir=/usr/local/bin --2 --filename=composer2
 RUN php composer-setup.php --install-dir=/usr/local/bin --1 --filename=composer1
-RUN a2enmod rewrite
 RUN rm composer-setup.php
 RUN rm -rf /var/lib/apt/lists/*
+
+RUN mkdir /app
+WORKDIR /app
+
+
+#ENTRYPOINT ["composer2"]
+

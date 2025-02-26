@@ -1,4 +1,4 @@
-FROM php:8.2-apache
+FROM php:8.3-apache
 
 RUN apt-get update 
 RUN apt-get install -y mariadb-client
@@ -87,7 +87,8 @@ RUN echo 'memory_limit = 640M' >> /usr/local/etc/php/php.ini && \
 
 RUN pecl install mailparse
 RUN curl -sS https://getcomposer.org/installer -o composer-setup.php
-RUN php composer-setup.php --install-dir=/usr/local/bin --filename=composer2
+RUN php composer-setup.php --install-dir=/usr/local/bin --2 --filename=composer2
+RUN php composer-setup.php --install-dir=/usr/local/bin --1 --filename=composer1
 RUN a2enmod rewrite
 RUN rm composer-setup.php
 RUN rm -rf /var/lib/apt/lists/*

@@ -1,4 +1,4 @@
-FROM php:8.2-apache
+FROM php:8.0
 
 RUN apt-get update 
 RUN apt-get install -y mariadb-client
@@ -78,8 +78,6 @@ RUN  CFLAGS="-I/usr/src/php" docker-php-ext-install xmlwriter
 RUN  CFLAGS="-I/usr/src/php" docker-php-ext-install xsl 
 RUN  CFLAGS="-I/usr/src/php" docker-php-ext-install zip
 
-RUN apt-get install -y --no-install-recommends  libsodium-dev
-RUN  CFLAGS="-I/usr/src/php" docker-php-ext-install sodium 
 
 RUN echo 'memory_limit = 640M' >> /usr/local/etc/php/php.ini && \
     echo 'post_max_size = 360M' >> /usr/local/etc/php/php.ini && \
@@ -88,6 +86,11 @@ RUN echo 'memory_limit = 640M' >> /usr/local/etc/php/php.ini && \
 RUN curl -sS https://getcomposer.org/installer -o composer-setup.php
 RUN php composer-setup.php --install-dir=/usr/local/bin --2 --filename=composer2
 RUN php composer-setup.php --install-dir=/usr/local/bin --1 --filename=composer1
-RUN a2enmod rewrite
 RUN rm composer-setup.php
 RUN rm -rf /var/lib/apt/lists/*
+
+RUN mkdir /app
+WORKDIR /app
+
+
+#ENTRYPOINT ["composer2"]
