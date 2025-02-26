@@ -1,25 +1,26 @@
 FROM php:7.3-apache
 
-RUN apt-get update 
-RUN apt-get install -y --no-install-recommends git 
-RUN apt-get install -y --no-install-recommends unzip 
-RUN apt-get install -y --no-install-recommends libbz2-dev 
-RUN apt-get install -y --no-install-recommends libcurl3-dev 
-RUN apt-get install -y --no-install-recommends libxml2-dev 
-RUN apt-get install -y --no-install-recommends libssl-dev 
-RUN apt-get install -y --no-install-recommends libpng-dev 
-RUN apt-get install -y --no-install-recommends libgmp-dev 
-RUN apt-get install -y --no-install-recommends libc-client-dev 
-RUN apt-get install -y --no-install-recommends libkrb5-dev 
-RUN apt-get install -y --no-install-recommends libldap2-dev 
-RUN apt-get install -y --no-install-recommends libmcrypt-dev 
-RUN apt-get install -y --no-install-recommends unixodbc-dev 
-RUN apt-get install -y --no-install-recommends libpq-dev 
-RUN apt-get install -y --no-install-recommends libtidy-dev 
-RUN apt-get install -y --no-install-recommends libxml2-dev 
-RUN apt-get install -y --no-install-recommends libxslt1-dev 
-RUN apt-get install -y --no-install-recommends libzip-dev 
-   
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends \
+        git \
+        unzip \
+        libbz2-dev \
+        libcurl3-dev \
+        libxml2-dev \
+        libssl-dev \
+        libpng-dev \
+        libgmp-dev \
+        libc-client-dev \
+        libkrb5-dev \
+        libldap2-dev \
+        libmcrypt-dev \
+        unixodbc-dev \
+        libpq-dev \
+        libtidy-dev \
+        libxml2-dev \
+        libxslt1-dev \
+        libzip-dev \
+    && rm -rf /var/lib/apt/lists/*
 
 RUN pecl install mcrypt
 
@@ -76,7 +77,6 @@ RUN docker-php-ext-configure imap --with-kerberos --with-imap-ssl && \
 RUN echo 'memory_limit = 640M' >> /usr/local/etc/php/php.ini && \
     echo 'post_max_size = 360M' >> /usr/local/etc/php/php.ini && \
     echo 'upload_max_filesize = 360M' >> /usr/local/etc/php/php.ini
-
 
 RUN  CFLAGS="-I/usr/src/php" docker-php-ext-install gettext 
 
